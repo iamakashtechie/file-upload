@@ -51,8 +51,20 @@ dropzoneBox.addEventListener("reset", (e) => {
   dropzoneFileMessage.innerHTML = `No Files Selected`;
 });
 
-dropzoneBox.addEventListener("submit", (e) => {
+dropzoneBox.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const myFiled = document.getElementById("upload-file");
-  console.log(myFiled.files[0]);
+  const file = document.getElementById("upload-file").files[0];
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await fetch('https://the-analyser.onrender.com/upload', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
 });
